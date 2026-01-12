@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control de Estado</title>
+</head>
+<body>
+    <h2 id="estado">Estado: INACTIVO (0)</h2>
+    <p id="time"></p>
+
+    <script>
+        function actualizar(e) {
+            document.getElementById('estado').textContent = 'Estado: ' + (e ? 'ACTIVO (1)' : 'INACTIVO (0)');
+            document.getElementById('time').textContent = new Date().toLocaleTimeString();
+        }
+
+        function consultar() {
+            fetch('estado.php').then(r => r.json()).then(d => actualizar(d.estado));
+        }
+
+        function cambiar(e) {
+            fetch('estado.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'estado=' + e
+            }).then(r => r.json()).then(d => actualizar(d.estado));
+        }
+
+        setInterval(consultar, 0);
+        consultar();
+    </script>
+</body>
+</html>
